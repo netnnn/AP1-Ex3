@@ -39,7 +39,7 @@ string calculateKNN(string filePath, char recv_buffer[]) {
     }
     string temp;
     temp = allStr.back();
-    int k;
+    unsigned int k;
     try {
         k = stoi(temp);
     }
@@ -64,7 +64,7 @@ string calculateKNN(string filePath, char recv_buffer[]) {
         x = &min;
         //If no such distance, its invalid.
     else {
-        throw new exception;
+        throw new exception();
     }
 
     vector<string> vecStr = allStr;
@@ -135,7 +135,7 @@ int main(int argv, char* args[]) {
     try {
         filePath = args[1];
         port = stoi(args[2]);
-    } catch (exception exception) {
+    } catch (...) {
         perror("invalid input");
         exit(0);
     }
@@ -181,9 +181,10 @@ int main(int argv, char* args[]) {
 
         //Read lines from the client.
         while(true){
-            //Receive a message from the cliennt
+            //Receive a message from the client
+            memset(recv_buffer, '\0', sizeof(recv_buffer));
             int read_bytes = recv(client_sock, recv_buffer, expected_data_len, 0);
-            //If 0 bytes were sent, the ckient closed the connection.
+            //If 0 bytes were sent, the client closed the connection.
             if (read_bytes == 0) {
                 perror("connection is closed");
                 close(client_sock);
@@ -197,13 +198,13 @@ int main(int argv, char* args[]) {
             //Find the type based on the k closest neighbors, if theres an exception it means the input was invalid.
             try{
                 maxType = calculateKNN(filePath, recv_buffer);
-            } catch (exception e) {
+            } catch (...) {
                 perror("invalid input");
                 close(client_sock);
                 break;
             }
             //If it was valid, send the type to the client.
-            int sent_bytes = send(client_sock, maxType.c_str(), read_bytes, 0);
+            int sent_bytes = send(client_sock, maxType.c_str(), maxType.length(), 0);
             if (sent_bytes < 0) {
                 perror("error sending to client");
                 close(client_sock);

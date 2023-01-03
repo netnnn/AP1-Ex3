@@ -76,11 +76,12 @@ int main(int argv, char* args[]) {
         //Receive the type from the server
         int expected_data_len = sizeof(recv_buffer);
         //If the server sends 0 bytes, it means it closed the socket by itself, which means the input was invalid.
+        memset(recv_buffer, '\0', sizeof(recv_buffer));
         int read_bytes = recv(sock, recv_buffer, expected_data_len, 0);
         if (read_bytes == 0) {
             perror("invalid input");
             close(sock);
-            break;
+            continue;
         }
         if (read_bytes < 0) {
             perror("error reading message");
