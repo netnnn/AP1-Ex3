@@ -17,7 +17,7 @@ using namespace std;
 int main(int argv, char* args[]) {
     //if more or less than 3 command line arguments, its invalid.
     if(argv != 3) {
-        perror("invalid input");
+        cout << "invalid input" << endl;
         exit(0);
     }
     //Initializing ip address and port no.
@@ -28,7 +28,7 @@ int main(int argv, char* args[]) {
         ip_address = args[1];
         port_no = stoi(args[2]);
     } catch (exception exception) {
-        perror("invalid input");
+        cout << "invalid input" << endl;
         exit(0);
     }
     //Making them const
@@ -37,7 +37,7 @@ int main(int argv, char* args[]) {
     //Creating a tcp socket for the client
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
-        perror("error creating socket");
+        cout << "error creating socket" << endl;
         exit(0);
     }
     //Connecting the client to the server socket
@@ -47,7 +47,7 @@ int main(int argv, char* args[]) {
     sin.sin_addr.s_addr = inet_addr(c_ip_address);
     sin.sin_port = htons(c_port_no);
     if (connect(sock, (struct sockaddr *) &sin, sizeof(sin)) < 0) {
-        perror("error connecting to server");
+        cout << "error connecting to server" << endl;
         close(sock);
         exit(0);
     }
@@ -69,28 +69,28 @@ int main(int argv, char* args[]) {
         int data_len = strlen(data_addr);
         int sent_bytes = send(sock, data_addr, data_len, 0);
         if (sent_bytes < 0) {
-            perror("error sending message");
+            cout << "error sending message" << endl;
             close(sock);
             exit(0);
         }
         //Receive the type from the server
         int expected_data_len = sizeof(recv_buffer);
-        //If the server sends 0 bytes, it means it closed the socket by itself, which means the input was invalid.
         memset(recv_buffer, '\0', sizeof(recv_buffer));
         int read_bytes = recv(sock, recv_buffer, expected_data_len, 0);
         if (read_bytes == 0) {
-            perror("invalid input");
+            cout << "connection is closed" << endl;
             close(sock);
             continue;
         }
         if (read_bytes < 0) {
-            perror("error reading message");
+            cout << "error reading message" << endl;
             close(sock);
             exit(0);
         }
-        //Print the type.
+        //Print the type. If the server sent "invalid input" it prints it.
         string maxType(recv_buffer);
         cout << maxType << endl;
+    
     }
     //Close the client socket.
     close(sock);

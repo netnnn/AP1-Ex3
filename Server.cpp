@@ -39,12 +39,15 @@ string calculateKNN(string filePath, char recv_buffer[]) {
     }
     string temp;
     temp = allStr.back();
-    unsigned int k;
+    int k;
     try {
         k = stoi(temp);
     }
     catch (exception e) {
         throw e;
+    }
+    if (k < 0) {
+        throw new exception;
     }
     allStr.pop_back();
     temp = allStr.back();
@@ -128,7 +131,7 @@ int main(int argv, char* args[]) {
     int port;
     //If number of arguments is different from 3 its invalid.
     if(argv != 3) {
-        perror("invalid input");
+        cout << "invalid input" << endl;
         exit(0);
     }
     //Get the arguments into variables.
@@ -136,7 +139,7 @@ int main(int argv, char* args[]) {
         filePath = args[1];
         port = stoi(args[2]);
     } catch (...) {
-        perror("invalid input");
+        cout << "invalid input" << endl;
         exit(0);
     }
 
@@ -144,7 +147,7 @@ int main(int argv, char* args[]) {
     const int server_port = port;
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
-        perror("error creating socket");
+        cout << "error creating socket" << endl;
         exit(0);
     }
     //Binding the socket
@@ -154,13 +157,13 @@ int main(int argv, char* args[]) {
     sin.sin_addr.s_addr = INADDR_ANY;
     sin.sin_port = htons(server_port);
     if (bind(sock, (struct sockaddr *) &sin, sizeof(sin)) < 0) {
-        perror("error binding socket");
+        cout << "error binding socket" << endl;
         close(sock);
         exit(0);
     }
     //Make the socket listen
     if (listen(sock, 5) < 0) {
-        perror("error listening to a socket");
+        cout << "error listen for sockets" << endl;
         close(sock);
         exit(0);
     }
@@ -175,7 +178,7 @@ int main(int argv, char* args[]) {
         //Accept a new client
         int client_sock = accept(sock, (struct sockaddr *) &client_sin, &addr_len);
         if (client_sock < 0) {
-            perror("error accepting client");
+            cout << "error accepting client" << endl;
             exit(0);
         }
 
@@ -186,12 +189,12 @@ int main(int argv, char* args[]) {
             int read_bytes = recv(client_sock, recv_buffer, expected_data_len, 0);
             //If 0 bytes were sent, the client closed the connection.
             if (read_bytes == 0) {
-                perror("connection is closed");
+                cout << "connection is closed" << endl;
                 close(client_sock);
                 break;
             }
             if (read_bytes < 0) {
-                perror("error reading message");
+                cout << "error reading message" << endl;
                 close(client_sock);
                 exit(0);
             }
@@ -199,14 +202,19 @@ int main(int argv, char* args[]) {
             try{
                 maxType = calculateKNN(filePath, recv_buffer);
             } catch (...) {
-                perror("invalid input");
-                close(client_sock);
-                break;
+                string errormsg = "invalid input";
+                int sent_bytes = send(client_sock, errormsg.c_str(), errormsg.length(), 0);
+                if (sent_bytes < 0) {
+                cout << "error sending to client" << endl;
+                    close(client_sock);
+                    exit(0);
+                }
+                continue;
             }
             //If it was valid, send the type to the client.
             int sent_bytes = send(client_sock, maxType.c_str(), maxType.length(), 0);
             if (sent_bytes < 0) {
-                perror("error sending to client");
+                cout << "error sending to client" << endl;
                 close(client_sock);
                 exit(0);
             }
