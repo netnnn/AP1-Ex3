@@ -205,7 +205,7 @@ int main(int argv, char* args[]) {
                 string errormsg = "invalid input";
                 int sent_bytes = send(client_sock, errormsg.c_str(), errormsg.length(), 0);
                 if (sent_bytes < 0) {
-                cout << "error sending to client" << endl;
+                    cout << "error sending to client" << endl;
                     close(client_sock);
                     exit(0);
                 }

@@ -64,6 +64,10 @@ int main(int argv, char* args[]) {
         if (newLine == "-1") {
             break;
         }
+        if (newLine == "") {
+            cout << "invalid input" << endl;
+            continue;
+        }
         //Send the message to the server
         const char* data_addr = newLine.c_str();
         int data_len = strlen(data_addr);
