@@ -18,8 +18,9 @@ An ERROR! message will occur in the following cases and the program will termina
 3. if the number of arguments is wrong. <br/>
 4. if the distance type does not exist. <br/>
 5. if the file does not exist. <br/>
-6. if the vector is illegal (has a field that is not a double). <br/>
-Also, if there are no valid vectors in the .csv file to compare distance with, an ERROR! message will pop but the program will continue to scan the next vector. <br/>
+6. if sending or recieveing a message failed. <br/>
+Whenever an illegal line is entered into the client, it will print an "invalid input" message and continue to scan the next line. <br/>
+When -1 is recieved into the client, it closes the connection and the client program. The server always keeps running.<br/>
 (Note: Minkowski uses a constant P for its calculation, we chose to calculate the distance with constant P=3). <br/>
 The code is modular: each function is in its own cpp file. This help keep the code organised and efficient. </p>
 
