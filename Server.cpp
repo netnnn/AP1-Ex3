@@ -21,7 +21,15 @@
 
 using namespace std;
 
+/**
+ * @brief A method which 
+ * 
+ * @param filePath path to the file of datasets
+ * @param recv_buffer the buffer which contains the input of the client
+ * @return string the type of the vector by its k closest neighbors.
+ */
 string calculateKNN(string filePath, char recv_buffer[]) {
+    //Create instances of the different distances
     const char *dis;
     Distance *x;
     ManhattanDistance man = ManhattanDistance();
@@ -30,13 +38,16 @@ string calculateKNN(string filePath, char recv_buffer[]) {
     ChebyshevDistance che = ChebyshevDistance();
     MinkowskiDistance min = MinkowskiDistance();
 
+    //splitting the line from the client into the vector, distance, and number k of neighbors.
     vector<string> allStr;
     char* ptr;
+    //Converting the line seperated by spaces to a vector.
     ptr = strtok(recv_buffer, " ");
     while (ptr != NULL) {
         allStr.emplace_back(ptr);
         ptr = strtok (NULL, " ");
     }
+    //The last string in the vector is the k.
     string temp;
     temp = allStr.back();
     int k;
@@ -49,12 +60,14 @@ string calculateKNN(string filePath, char recv_buffer[]) {
     if (k < 0) {
         throw new exception;
     }
+    //Then, the last string in the vector is the distance.
     allStr.pop_back();
     temp = allStr.back();
     dis = temp.c_str();
     allStr.pop_back();
+    //Then allStr is left with just the vector.
 
-
+    //Choosing the correct distance
     if (strcmp("MAN", dis) == 0)
         x = &man;
     else if (strcmp("AUC", dis) == 0)
@@ -65,7 +78,7 @@ string calculateKNN(string filePath, char recv_buffer[]) {
         x = &che;
     else if (strcmp("MIN", dis) == 0)
         x = &min;
-        //If no such distance, its invalid.
+    //If no such distance, its invalid.
     else {
         throw new exception();
     }
@@ -117,9 +130,10 @@ string calculateKNN(string filePath, char recv_buffer[]) {
 }
 
 /**
- * @brief The main method that gets a number of neighbors to find, a path to the file and the distance to calculate
- * by. It then recieves a vector and returns the type that appeared the most out of the k closest neighbors to it,
- * in an infinite loop.
+ * @brief The main method that gets a file path of the datasets and a port to open the socket on.
+ * It then recieves a line from the client which consists of a vector, distance and number k,
+ * calculates its type based on the k closest neighbors. It then sends the type back to the client.
+ * If the input was invalid, it sends "invalid input" to the client.
  *
  * @param argv number of command line arguments
  * @param args command line arguments
@@ -182,7 +196,7 @@ int main(int argv, char* args[]) {
             exit(0);
         }
 
-        //Read lines from the client.
+        //Read a line from the client, and calculate the k closest neighbors and return its type or an error.
         while(true){
             //Receive a message from the client
             memset(recv_buffer, '\0', sizeof(recv_buffer));

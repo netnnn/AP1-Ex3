@@ -8,7 +8,10 @@
 using namespace std;
 
 /**
- * @brief the main method of the client
+ * @brief the main method of the client: it gets the ip and port of the server in the command line arguments.
+ * then,a loop which gets a line that consists of a vector, distance and k.
+ * sends the line to the server, and prints its type based on the k closest neighbors or prints an error if
+ * the input is invalid.
  * 
  * @param argv number of command line arguments
  * @param args the command line arguments
@@ -64,10 +67,12 @@ int main(int argv, char* args[]) {
         if (newLine == "-1") {
             break;
         }
+        //If the line is empty, its invalid
         if (newLine == "") {
             cout << "invalid input" << endl;
             continue;
         }
+        //Check if the line is just spaces: if the number of space is the length of the string, its invalid.
         int numOfSpaces = 0;
         for(int i = 0; i < newLine.length(); i++) {
             if (newLine[i] == ' ') {
