@@ -1,8 +1,14 @@
-a.out: Main.o CanberraDistance.o ChebyshevDistance.o Distance.o EuclidianDistance.o IfstreamToMap.o KNN.o ManhattanDistance.o MinkowskiDistance.o StrToVector.o
-	g++ -std=c++11 Main.o CanberraDistance.o ChebyshevDistance.o Distance.o EuclidianDistance.o IfstreamToMap.o KNN.o ManhattanDistance.o MinkowskiDistance.o StrToVector.o -o a.out
+sever.out: Server.o client.out CanberraDistance.o ChebyshevDistance.o Distance.o EuclidianDistance.o IfstreamToMap.o KNN.o ManhattanDistance.o MinkowskiDistance.o StrToVector.o
+	g++ -std=c++11 Server.o CanberraDistance.o ChebyshevDistance.o Distance.o EuclidianDistance.o IfstreamToMap.o KNN.o ManhattanDistance.o MinkowskiDistance.o StrToVector.o -o server.out
 
-Main.o: Main.cpp
-	g++ -std=c++11 -c Main.cpp
+client.out: Client.o CanberraDistance.o ChebyshevDistance.o Distance.o EuclidianDistance.o IfstreamToMap.o KNN.o ManhattanDistance.o MinkowskiDistance.o StrToVector.o
+	g++ -std=c++11 Client.o CanberraDistance.o ChebyshevDistance.o Distance.o EuclidianDistance.o IfstreamToMap.o KNN.o ManhattanDistance.o MinkowskiDistance.o StrToVector.o -o client.out
+
+
+Client.o: Client.cpp
+	g++ -std=c++11 -c Client.cpp
+Server.o: Server.cpp
+	g++ -std=c++11 -c Server.cpp
 CanberraDistance.o: CanberraDistance.cpp CanberraDistance.h
 	g++ -std=c++11 -c CanberraDistance.cpp
 ChebyshevDistance.o: ChebyshevDistance.cpp ChebyshevDistance.h

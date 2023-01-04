@@ -57,7 +57,7 @@ string calculateKNN(string filePath, char recv_buffer[]) {
     catch (exception e) {
         throw e;
     }
-    if (k < 0) {
+    if (k <= 0) {
         throw new exception;
     }
     //Then, the last string in the vector is the distance.
@@ -144,7 +144,7 @@ int main(int argv, char* args[]) {
     string filePath;
     int port;
     //If number of arguments is different from 3 its invalid.
-    if(argv != 3) {
+    if (argv != 3) {
         cout << "invalid input" << endl;
         exit(0);
     }
@@ -157,6 +157,10 @@ int main(int argv, char* args[]) {
         exit(0);
     }
 
+    if (port <= 1024 || port >= 65536) {
+        cout << "invalid port value" << endl;
+        exit(0);
+    }
     //Creating a server socket
     const int server_port = port;
     int sock = socket(AF_INET, SOCK_STREAM, 0);
