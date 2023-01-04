@@ -68,6 +68,16 @@ int main(int argv, char* args[]) {
             cout << "invalid input" << endl;
             continue;
         }
+        int numOfSpaces = 0;
+        for(int i = 0; i < newLine.length(); i++) {
+            if (newLine[i] == ' ') {
+                numOfSpaces++;
+            }
+        }
+        if (numOfSpaces == newLine.length()) {
+            cout << "invalid input" << endl;
+            continue;
+        }
         //Send the message to the server
         const char* data_addr = newLine.c_str();
         int data_len = strlen(data_addr);
@@ -82,7 +92,6 @@ int main(int argv, char* args[]) {
         memset(recv_buffer, '\0', sizeof(recv_buffer));
         int read_bytes = recv(sock, recv_buffer, expected_data_len, 0);
         if (read_bytes == 0) {
-            cout << "connection is closed" << endl;
             close(sock);
             continue;
         }

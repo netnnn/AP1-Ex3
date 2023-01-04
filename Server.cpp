@@ -189,7 +189,6 @@ int main(int argv, char* args[]) {
             int read_bytes = recv(client_sock, recv_buffer, expected_data_len, 0);
             //If 0 bytes were sent, the client closed the connection.
             if (read_bytes == 0) {
-                cout << "connection is closed" << endl;
                 close(client_sock);
                 break;
             }
