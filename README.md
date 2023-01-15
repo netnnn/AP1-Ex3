@@ -1,4 +1,4 @@
-<h1 align="center">AP1-EX2</h1>
+<h1 align="center">AP1-EX3</h1>
 
 <p align="center">The project contains a method that classifies a vector, given a chart of classified vectors. <br/>
 At start, the server will execute as the following: "./server.out file port", file will be the file of vectors with their type, <br/>
